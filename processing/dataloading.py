@@ -12,4 +12,5 @@ for batch in train_loader:
     
     # Print a tiny sample of what the word IDs look like
     print("\nFirst sentence token IDs in Encoder:\n", batch["input_ids"][0][:10])
+    print("Its shape is", batch["input_ids"][0].shape)
     break

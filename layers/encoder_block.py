@@ -1,9 +1,10 @@
 import torch
 from torch import nn
-import math
+from .feed_forward import FeedForward
+from .multi_head_attention import MultiHeadAttention
 
 class EncoderBlock(nn.Module):
-    def __init__(self, d_model):
+    def __init__(self, d_model, n_heads):
         super().__init__()
         self.d_model = d_model
         self.multi_head_attention = MultiHeadAttention(d_model, n_heads)
