@@ -3,16 +3,17 @@ import torch
 from .scaled_dot_prod_attention import ScaledDotProdAttention
 
 class MultiHeadAttention(nn.Module):
-    def __init__(self, d_model, h_heads, mask=None):
+    def __init__(self, d_model, h_heads, mask=False):
         super().__init__()
         self.d_model = d_model
         self.h_heads = h_heads
         self.dk = d_model // self.h_heads
         self.dv = d_model // self.h_heads
-        self.scaled_dot_prod_attention = ScaledDotProdAttention(self.d_model, mask)
-        self.linear_q = nn.Linear(self.d_model, self.dk)
-        self.linear_k = nn.Linear(self.d_model, self.dk)
-        self.linear_v = nn.Linear(self.d_model, self.dv)
+        self.use_mask = mask
+        self.scaled_dot_prod_attention = ScaledDotProdAttention(self.dk, mask=None)
+        self.linear_q = nn.Linear(self.d_model, self.d_model)
+        self.linear_k = nn.Linear(self.d_model, self.d_model)
+        self.linear_v = nn.Linear(self.d_model, self.d_model)
         self.linear_output = nn.Linear(self.d_model, self.d_model)
 
     def forward(self, Q, K, V):
