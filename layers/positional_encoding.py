@@ -3,9 +3,10 @@ from torch import nn
 import math
 
 class PositionalEncoding(nn.Module):
-    def __init__(self, d_model):
+    def __init__(self, d_model, vocab_size):
         super().__init__()
         self.d_model = d_model
+        self.vocab_size = vocab_size
 
     def token2vec(self, token, position):
         token_vec = []
@@ -15,8 +16,13 @@ class PositionalEncoding(nn.Module):
         return token_vec
     
     def forward(self, x):
+        batch_size, seq_len = x.shape
         vecs = []
-        for token_position in range(x.shape[0]):
-            vec = self.token2vec(x[token_position], token_position)
-            vecs.append(vec)
-        return torch.tensor(vecs)
+        for batch_idx in range(batch_size):
+            batch_vecs = []
+            for token_position in range(seq_len):
+                token = x[batch_idx, token_position].item()
+                vec = self.token2vec(token, token_position)
+                batch_vecs.append(vec)
+            vecs.append(batch_vecs)
+        return torch.tensor(vecs, dtype=torch.float32)

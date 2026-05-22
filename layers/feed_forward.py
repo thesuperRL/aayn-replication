@@ -12,7 +12,11 @@ class FeedForward(nn.Module):
     
     def forward(self, x):
         # "two linear transformations with a ReLU activation in between."
+        # Conv1d expects (batch, channels, length), so transpose from (batch, length, channels)
+        x = x.transpose(1, 2)
         x = self.fc1(x)
         x = self.relu(x)
         x = self.fc2(x)
+        # Transpose back to (batch, length, channels)
+        x = x.transpose(1, 2)
         return x
