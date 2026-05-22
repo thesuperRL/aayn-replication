@@ -1,16 +1,11 @@
 from torch.utils.data import DataLoader
-from tokenization import tokenized_train, tokenized_test
+from .tokenization import get_tokenized_datasets
 
-# Create the iterable batch loaders for training and testing
-train_loader = DataLoader(tokenized_train, batch_size=32, shuffle=True)
-test_loader = DataLoader(tokenized_test, batch_size=32, shuffle=False)
-
-# Let's inspect a single batch to see what your model will receive
-for batch in train_loader:
-    print("Encoder Input Shape (Batch Size, Sequence Length):", batch["input_ids"].shape)
-    print("Decoder Target Shape (Batch Size, Sequence Length):", batch["labels"].shape)
+def get_dataloaders(batch_size=32):
+    tokenized_train, tokenized_val, tokenized_test, src_vocab, tgt_vocab, pad_id = get_tokenized_datasets()
     
-    # Print a tiny sample of what the word IDs look like
-    print("\nFirst sentence token IDs in Encoder:\n", batch["input_ids"][0][:10])
-    print("Its shape is", batch["input_ids"][0].shape)
-    break
+    train_loader = DataLoader(tokenized_train, batch_size=batch_size, shuffle=True)
+    val_loader = DataLoader(tokenized_val, batch_size=batch_size, shuffle=False)
+    test_loader = DataLoader(tokenized_test, batch_size=batch_size, shuffle=False)
+    
+    return train_loader, val_loader, test_loader, src_vocab, tgt_vocab, pad_id
