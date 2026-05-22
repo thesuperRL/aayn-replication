@@ -11,6 +11,7 @@ The model trains on the Multi30k dataset (English to German translation), which 
 - Test samples: ~1,000
 
 ## Implementation
+
 All code in [`layers`](layers) is written by Ryan.
 
 Cursor AI was used in implementing data processing and the train file itself because that is not the goal of this project/excercise.
