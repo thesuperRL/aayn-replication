@@ -13,7 +13,7 @@ class EncoderBlock(nn.Module):
         self.layer_norm2 = nn.LayerNorm(d_model)
     
     def forward(self, x):
-        x = self.multi_head_attention(x)
+        x = self.multi_head_attention(x, x, x)
         x = self.layer_norm1(x)
         x = self.feed_forward(x)
         x = self.layer_norm2(x)
